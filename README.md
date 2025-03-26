@@ -1,5 +1,5 @@
 # Overview
-This repository contains end-to-end (E2E) tests for Bookly24 using Playwright with TypeScript. The tests ensure the core functionalities of the platform work as expected.
+This repository contains end-to-end (E2E) tests for Bookly24 (Scheduling Software) using Playwright with TypeScript. The tests ensure the core functionalities of the platform work as expected.
 
 # Prerequisites
 Ensure you have the following installed:
