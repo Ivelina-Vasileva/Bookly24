@@ -12,7 +12,7 @@ export default defineConfig({
 
   use: {
     browserName: 'chromium', // Задаваме браузъра
-    headless: false,
+    headless: true,
     baseURL: 'https://app.bookly24.tech/auth', 
     trace: 'on-first-retry',
     //screenshot: 'only-on-failure', // Автоматичен screenshot при грешка
