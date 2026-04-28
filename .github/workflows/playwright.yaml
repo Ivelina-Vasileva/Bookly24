@@ -40,11 +40,11 @@ jobs:
         SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
         SERVICE_PRICE: ${{ secrets.SERVICE_PRICE }}
         SLOT_TIME: ${{ secrets.SLOT_TIME }}
-      run: >
-        npx playwright test --headless
-        Tests/crm/LoginFlow/Login.spec.ts 
-        Tests/crm/LoginFlow/IncorectCredential.spec.ts 
-        Tests/crm/LoginFlow/ForgotPasswordFlow.spec.ts 
+      run: |
+        npx playwright test --headless --project=chromium \
+        Tests/crm/LoginFlow/Login.spec.ts \
+        Tests/crm/LoginFlow/IncorectCredential.spec.ts \
+        Tests/crm/LoginFlow/ForgotPasswordFlow.spec.ts \
         Tests/crm/LoginFlow/RegisterDuplicateEmail.spec.ts
 
     - name: Upload Test Results
