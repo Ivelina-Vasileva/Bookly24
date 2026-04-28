@@ -41,7 +41,7 @@ jobs:
         SERVICE_PRICE: ${{ secrets.SERVICE_PRICE }}
         SLOT_TIME: ${{ secrets.SLOT_TIME }}
       run: |
-        npx playwright test --headless --project=chromium \
+        npx playwright test --project=chromium \
         Tests/crm/LoginFlow/Login.spec.ts \
         Tests/crm/LoginFlow/IncorectCredential.spec.ts \
         Tests/crm/LoginFlow/ForgotPasswordFlow.spec.ts \
