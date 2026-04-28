@@ -1,15 +1,17 @@
 import { Page, expect } from '@playwright/test';
 import { getTodayDate } from '@helpers/dateHelper';
 import { convertTimeToMinutes } from '@helpers/dateHelper';
-export async function selectSlot(page: Page, slotTime: string) {
-    await page.click('.ant-select-selector');
-    await page.waitForSelector('#slot', { state: 'visible' });
-
-    const slotOption = await page.locator(`#slot_list [aria-label="${slotTime}"]`);
-    await slotOption.click();
-    await expect(page.locator('.ant-select-selection-placeholder')).not.toHaveText('Избери час');
+import * as dotenv from 'dotenv';
+dotenv.config();
+export async function selectSlotHour(page: Page) {
+    const slotTime = process.env.SLOT_TIME as string;
+    await page.locator('.ant-select-selector').nth(2).click();
+    await page.waitForSelector('#slot_list', { state: 'attached' });
+    const slotOption = page.locator(`.ant-select-item[title="${slotTime}"]`);
+    await slotOption.waitFor({ state: 'visible' });
+    await page.pause();
+    await slotOption.click({ force: true });
 }
-
 export async function selectFutureSlot(page: Page) {
     const today = getTodayDate();
     console.log(`Проверяваме слотовете за дата: ${today}`);

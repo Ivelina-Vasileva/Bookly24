@@ -6,5 +6,3 @@ test('Verify that Google login redirects to /account', async () => {
     await loginWithGoogle(page, context);
     await browser.close();
 });
-
-

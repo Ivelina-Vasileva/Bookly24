@@ -1,4 +1,4 @@
-import { Page, Browser, BrowserContext, chromium, expect } from "@playwright/test";
+import { Page, Browser, BrowserContext, chromium, expect } from '@playwright/test';
 import * as dotenv from 'dotenv';
 dotenv.config();
 /**
@@ -6,7 +6,11 @@ dotenv.config();
  * @returns Обект с browser, context и page
  */
 
-export async function launchBrowser(): Promise<{ browser: Browser; context: BrowserContext; page: Page }> {
+export async function launchBrowser(): Promise<{
+    browser: Browser;
+    context: BrowserContext;
+    page: Page;
+}> {
     const browser = await chromium.launch({
         headless: false,
         args: [
@@ -14,11 +18,16 @@ export async function launchBrowser(): Promise<{ browser: Browser; context: Brow
             '--disable-infobars',
             '--disable-dev-shm-usage',
             '--no-sandbox',
-            '--disable-gpu'
+            '--disable-gpu',
         ],
     });
 
-    const context = await browser.newContext();
+    const context = await browser.newContext({
+        recordVideo: {
+            dir: 'test-results/videos/', // Папка за запис на видеата
+            size: { width: 1280, height: 720 }, // Размер на видеото
+        },
+    });
     await context.addInitScript(() => {
         Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
     });
@@ -34,12 +43,12 @@ export async function launchBrowser(): Promise<{ browser: Browser; context: Brow
  * @param password - Парола на потребителя
  */
 export async function registerWithValidCredentials(page: Page) {
-   const email = process.env.LOGIN_EMAIL as string;
-   const password = process.env.LOGIN_PASSWORD as string;
+    const email = process.env.LOGIN_EMAIL as string;
+    const password = process.env.LOGIN_PASSWORD as string;
     await page.goto(process.env.AUTH_URL as string);
-    await page.click("text=Sign Up");
-    await page.fill('input[name="email"]', email);
-    await page.fill('input[name="password"]', password);
+    await page.click('text=Sign Up');
+    await page.fill('#login_email', email);
+    await page.fill('#login_password', password);
     await page.click('button[type="submit"]');
     await isRegisterSuccessful(page);
 }
@@ -55,16 +64,16 @@ export async function isRegisterSuccessful(page: Page) {
 export async function registerWithDuplicateCredentials(page: Page) {
     const email = process.env.LOGIN_EMAIL as string;
     const password = process.env.LOGIN_PASSWORD as string;
-     await page.goto(process.env.AUTH_URL as string);
-     await page.click("text=Sign Up");
-     await page.fill('input[name="email"]', email);
-     await page.fill('input[name="password"]', password);
-     await page.click('button[type="submit"]');
-     await isRegisterNotSuccessful(page);
- }
-export async function isRegisterNotSuccessful(page: Page){
+    await page.goto(process.env.AUTH_URL as string);
+    await page.click('text=Sign Up');
+    await page.fill('#login_email', email);
+    await page.fill('#login_password', password);
+    await page.click('button[type="submit"]');
+    await isRegisterNotSuccessful(page);
+}
+export async function isRegisterNotSuccessful(page: Page) {
     const errorMessage = await page.textContent('span:text("This email address is already in use")');
-expect(errorMessage).toBe("This email address is already in use")
+    expect(errorMessage).toBe('This email address is already in use');
 }
 /**
  * Вход в CRM с email и парола
@@ -73,7 +82,6 @@ expect(errorMessage).toBe("This email address is already in use")
  * @param password - Парола на потребителя
  */
 export async function loginWithCRM(page: Page) {
-    
     const email = process.env.LOGIN_EMAIL as string;
     const password = process.env.LOGIN_PASSWORD as string;
     await page.goto(process.env.AUTH_URL as string);
@@ -84,14 +92,14 @@ export async function loginWithCRM(page: Page) {
 }
 
 export async function loginWithInvalidCredentials(page: Page) {
-   const email = process.env.INVALID_EMAIL as string;
-   const password = process.env.INVALID_PASSWORD as string;
+    const email = process.env.INVALID_EMAIL as string;
+    const password = process.env.INVALID_PASSWORD as string;
     await page.goto(process.env.AUTH_URL as string);
     await page.fill('#login_email', email);
     await page.fill('#login_password', password);
     await page.click('button[type="submit"]');
     const errorMessage = await page.textContent('span:text("Wrong credentials")');
-expect(errorMessage).toBe("Wrong credentials");  
+    expect(errorMessage).toBe('Wrong credentials');
 }
 
 /**
@@ -139,10 +147,5 @@ export async function resetPassword(page: Page) {
     await page.fill('#login_email', email);
     await page.click('button[type="submit"]');
     const Message = await page.textContent('span:text("We sent you an email")');
-expect(Message).toBe("We sent you an email"); 
-
+    expect(Message).toBe('We sent you an email');
 }
-
-
-
-

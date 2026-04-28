@@ -2,7 +2,8 @@ import { defineConfig, devices} from '@playwright/test';
 import * as dotenv from 'dotenv';
 dotenv.config();
 export default defineConfig({
-  testDir: './tests',
+  testDir: './Tests',
+  testMatch: '**/*.spec.ts',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -12,10 +13,13 @@ export default defineConfig({
   use: {
     browserName: 'chromium', // Задаваме браузъра
     headless: false,
-    baseURL: 'https://bookly24.com/', 
+    baseURL: 'https://app.bookly24.tech/auth', 
     trace: 'on-first-retry',
     //screenshot: 'only-on-failure', // Автоматичен screenshot при грешка
-   // video: 'retain-on-failure', // Запазване на видео само ако тестът фейлне
+   video: {
+      mode: 'on',
+      size: { width: 1280, height: 720 },
+   }
   },
 
   projects: [
